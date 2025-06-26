@@ -1,14 +1,19 @@
-// src/app/page.js
 "use client";
 
-import dynamic from "next/dynamic";
-import React, { useState } from 'react'; // Import useState for the mobile menu toggle
+import React, { useState, useEffect } from 'react'; // Import useState and useEffect
 
-// Dynamically import the MapComponent from the 'components' folder.
-const MapComponent = dynamic(() => import("./components/Map"), { ssr: false });
+// Assuming MapComponent is a standard React component and can be imported directly.
+// If MapComponent itself contains Next.js specific code, it would need further modification.
+import MapComponent from "./components/Map";
 
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State for mobile menu toggle
+  const [isClient, setIsClient] = useState(false); // State to track if component is mounted on client
+
+  useEffect(() => {
+    // Set isClient to true once the component mounts, indicating it's running in the browser
+    setIsClient(true);
+  }, []); // Empty dependency array ensures this runs once after initial render
 
   const darkTheme = {
     backgroundColor: '#1a1a2e', // Dark background for the body
@@ -43,22 +48,35 @@ export default function HomePage() {
           zIndex: 1000 
       }}>
         {/* Navigation Bar */}
-        <nav style={{ backgroundColor: darkTheme.borderColor, padding: '10px 0', position: 'relative' }}>
+        <nav style={{ 
+            backgroundColor: darkTheme.borderColor, 
+            padding: '10px 20px', 
+            position: 'relative',
+            display: 'flex', // Use flexbox for the nav bar
+            justifyContent: 'space-between', // Space between logo/title and links/button
+            alignItems: 'center' // Vertically align items
+        }}>
+          {/* Logo or Site Title (Example) */}
+          <div style={{ fontSize: '1.5em', fontWeight: 'bold', color: darkTheme.primaryColor }}>
+            GeoView
+          </div>
+
           {/* Mobile Menu Toggle Button */}
           <button 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="menu-toggle-button" // Class for CSS styling
             style={{
               background: 'none',
-              border: '1px solid ' + darkTheme.primaryColor,
+              border: `1px solid ${darkTheme.primaryColor}`,
               color: darkTheme.primaryColor,
               fontSize: '1.2em',
               padding: '8px 15px',
               borderRadius: '5px',
               cursor: 'pointer',
+              transition: 'background-color 0.3s, color 0.3s',
             }}
           >
-            {isMenuOpen ? 'Close Menu' : 'Menu'}
+            {isMenuOpen ? 'Close' : 'Menu'}
           </button>
 
           {/* Navigation Links */}
@@ -69,9 +87,9 @@ export default function HomePage() {
               padding: '0', 
               margin: '0', 
               flexWrap: 'wrap',
-              // Display and direction handled by CSS now for responsiveness
-              // This inline 'flex' might be overridden by 'display:none' from CSS for mobile
-              display: 'flex', // Default to flex for larger screens
+              // Removed 'display: flex' from inline style to allow CSS media queries full control
+              flexDirection: 'row',
+              justifyContent: 'center', // Center links on desktop
             }}
           >
             <li style={{ margin: '0 15px' }}>
@@ -128,7 +146,7 @@ export default function HomePage() {
             alignItems: 'center',
             justifyContent: 'center',
             minHeight: '400px', 
-            backgroundImage: 'url(/images/welcome_banner.jpg)', 
+            backgroundImage: 'url(/images/welcome_banner.jpg)', // Reverted to original image path
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             color: '#ffffff', 
@@ -179,13 +197,13 @@ export default function HomePage() {
             maxWidth: '1200px', 
             margin: '0 auto'    
         }}>
-            <h2 style={{ color: darkTheme.primaryColor, marginTop: '0', marginBottom: '25px', textAlign: 'center' }}>Key Applications & Impact</h2>
+            <h2 style={{ color: darkTheme.primaryColor, marginTop: '0', marginBottom: '25px', textAlign: 'center' }}>Key Applications and Impact</h2>
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', gap: '20px' }}>
                 {/* Application Card 1: Agriculture */}
                 <div style={{ flex: '1 1 45%', minWidth: '300px', background: darkTheme.cardBg, padding: '20px', borderRadius: '8px', boxShadow: darkTheme.boxShadow, border: `1px solid ${darkTheme.borderColor}` }}>
-                    <h3 style={{ color: darkTheme.secondaryColor, marginTop: '0', marginBottom: '10px', fontSize: '1.2em' }}>Agriculture & Land Management</h3>
+                    <h3 style={{ color: darkTheme.secondaryColor, marginTop: '0', marginBottom: '10px', fontSize: '1.2em' }}>Agriculture and Land Management</h3>
                     <img 
-                        src="/images/agriculture.jpg" 
+                        src="/images/agriculture.jpg" // Reverted to original image path
                         alt="Satellite view of agricultural fields" 
                         style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '4px', marginBottom: '15px' }} 
                     />
@@ -197,9 +215,9 @@ export default function HomePage() {
                 </div>
                 {/* Application Card 2: Environmental Monitoring */}
                 <div style={{ flex: '1 1 45%', minWidth: '300px', background: darkTheme.cardBg, padding: '20px', borderRadius: '8px', boxShadow: darkTheme.boxShadow, border: `1px solid ${darkTheme.borderColor}` }}>
-                    <h3 style={{ color: darkTheme.secondaryColor, marginTop: '0', marginBottom: '10px', fontSize: '1.2em' }}>Environmental & Climate Monitoring</h3>
+                    <h3 style={{ color: darkTheme.secondaryColor, marginTop: '0', marginBottom: '10px', fontSize: '1.2em' }}>Environmental and Climate Monitoring</h3>
                     <img 
-                        src="/images/environment.jpg" 
+                        src="/images/environment.jpg" // Reverted to original image path
                         alt="Satellite view of a forest or ecosystem" 
                         style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '4px', marginBottom: '15px' }} 
                     />
@@ -209,11 +227,11 @@ export default function HomePage() {
                         and support understanding of ecosystem dynamics.
                     </p>
                 </div>
-                {/* Application Card 3: Urban Planning & Disaster Response */}
+                {/* Application Card 3: Urban Planning and Rapid Assessment */}
                 <div style={{ flex: '1 1 45%', minWidth: '300px', background: darkTheme.cardBg, padding: '20px', borderRadius: '8px', boxShadow: darkTheme.boxShadow, border: `1px solid ${darkTheme.borderColor}` }}>
-                    <h3 style={{ color: darkTheme.secondaryColor, marginTop: '0', marginBottom: '10px', fontSize: '1.2em' }}>Urban Planning & Rapid Assessment</h3>
+                    <h3 style={{ color: darkTheme.secondaryColor, marginTop: '0', marginBottom: '10px', fontSize: '1.2em' }}>Urban Planning and Rapid Assessment</h3>
                     <img 
-                        src="/images/urban_disaster.jpg" 
+                        src="/images/urban_disaster.jpg" // Reverted to original image path
                         alt="Satellite view of a city or disaster area" 
                         style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '4px', marginBottom: '15px' }} 
                     />
@@ -236,7 +254,8 @@ export default function HomePage() {
             margin: '0 auto'    
         }}>
           <h2 style={{ color: darkTheme.primaryColor, marginTop: '0', marginBottom: '25px', textAlign: 'center' }}>Dynamic Satellite Imagery Viewer</h2>
-          <MapComponent />
+          {/* Conditionally render MapComponent only when client-side */}
+          {isClient && <MapComponent />}
         </section>
 
         <section id="how-to-use" style={{ 
@@ -380,8 +399,8 @@ export default function HomePage() {
         @media (max-width: 768px) {
           .menu-toggle-button {
             display: block; /* Show menu button on small screens */
-            width: calc(100% - 40px); /* Adjust width for padding */
-            margin: 10px 20px;
+            width: auto; 
+            margin-left: auto; /* Push to the right */
           }
 
           .nav-links {
@@ -393,17 +412,23 @@ export default function HomePage() {
             left: 0;
             background-color: ${darkTheme.borderColor}; /* Background for dropdown */
             box-shadow: ${darkTheme.boxShadow};
-            /* Control display via JS state. 'display: none' is the default hidden state. */
+            /* This line ensures it's hidden by default and only flex when isMenuOpen is true */
             display: ${isMenuOpen ? 'flex' : 'none'}; 
             transition: all 0.3s ease-in-out; /* Smooth transition for opening/closing */
+            padding: 10px 0; /* Add padding to the dropdown menu */
           }
 
           .nav-links li {
-            margin: 10px 0;
+            margin: 10px 0; /* Vertical margin for mobile links */
           }
 
           main {
             padding: 10px; /* Reduced overall padding for small screens */
+          }
+
+          /* Adjust header padding for better mobile appearance if needed */
+          header nav {
+              padding: 10px 15px; /* Smaller horizontal padding for nav on mobile */
           }
         }
 
@@ -419,9 +444,16 @@ export default function HomePage() {
             position: static; /* Reset position for desktop */
             background-color: transparent; /* No background for dropdown */
             box-shadow: none;
+            /* Remove padding set for mobile dropdown */
+            padding: 0; 
           }
           .nav-links li {
             margin: 0 15px; /* Restore desktop margins */
+          }
+
+          /* Ensure desktop nav centers links when menu button is hidden */
+          header nav {
+            justify-content: space-between; /* Space out title and links */
           }
         }
       `}</style>
